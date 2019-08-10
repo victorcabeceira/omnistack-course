@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   userContainer: {
     flex: 1,
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
       height: 2
     }
   },
+
   loadingOrEmptyView: {
     flex: 1,
     justifyContent: 'center',
@@ -82,7 +83,46 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     color: '#999',
+    fontWeight: 'bold'
+  },
+
+  matchContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  matchImage: {
+    height:  60,
+    resizeMode: 'contain'
+  },
+  matchAvatar: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 5,
+    borderColor: '#FFF',
+    marginVertical: 30
+  },
+  matchName: {
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#FFF'
+  },
+  matchBio: {
+    marginTop: 10,
+    fontSize: 16,
+    color: 'rgba(255,255,255,0.8)',
+    lineHeight: 20,
+    textAlign: 'center',
+    paddingHorizontal: 30
+  },
+  closeMatch: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'rgba(255,255,255,0.8)',
+    textAlign: 'center',
+    marginTop: 40,
   }
 });
 

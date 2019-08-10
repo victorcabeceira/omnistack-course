@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import io from 'socket.io-client';
 
 import api from '../core/services/api';
 
 import logo from '../assets/logo.svg';
 import like from '../assets/like.svg';
 import dislike from '../assets/dislike.svg';
+import matchImg from '../assets/itsamatch.png';
 
 import './Main.css';
 
 const Main = ({ match }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const headers = {
-    user: match.params.id
-  };
+  const [matchDev, setMatchDev] = useState(false);
+  const headers = { user: match.params.id };
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -30,6 +31,16 @@ const Main = ({ match }) => {
     };
 
     loadUsers();
+  }, [match.params.id]);
+
+  useEffect(() => {
+    const socket = io('http://localhost:3333', {
+      query: { user: match.params.id }
+    });
+
+    socket.on('match', dev => {
+      setMatchDev(dev);
+    });
   }, [match.params.id]);
 
   const handleDislike = async target_id => {
@@ -56,7 +67,7 @@ const Main = ({ match }) => {
         <img src={logo} alt='Tindev' />
       </Link>
       {loading ? (
-        <div className='loading-users'>Carregando...</div>
+        <div className='loading-users'>Loading...</div>
       ) : users.length ? (
         <ul>
           {users.map(user => (
@@ -80,6 +91,22 @@ const Main = ({ match }) => {
         </ul>
       ) : (
         <div className='empty-list'>No one to like or dislike...</div>
+      )}
+
+      {matchDev && (
+        <div className='match-container'>
+          <img src={matchImg} alt={`It's a match`} />
+          <img
+            className='avatar'
+            src={matchDev.avatar}
+            alt='Avatar'
+          />
+          <strong>{matchDev.name}</strong>
+          <p>{matchDev.bio}</p>
+          <button type='button' onClick={() => setMatchDev(false)}>
+            CLOSE
+          </button>
+        </div>
       )}
     </div>
   );

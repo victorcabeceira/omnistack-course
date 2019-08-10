@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import {
   SafeAreaView,
   View,
@@ -13,12 +14,14 @@ import api from '../../core/services';
 import logo from '../../assets/logo.png';
 import dislike from '../../assets/dislike.png';
 import like from '../../assets/like.png';
+import matchImg from '../../assets/itsamatch.png';
 
 import styles from './styles';
 
 const Main = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [matchDev, setMatchDev] = useState(false);
   const id = navigation.getParam('user', '');
   const headers = { user: id };
 
@@ -34,6 +37,16 @@ const Main = ({ navigation }) => {
     };
 
     loadUsers();
+  }, [id]);
+
+  useEffect(() => {
+    const socket = io('http://localhost:3333', {
+      query: { user: id }
+    });
+
+    socket.on('match', dev => {
+      setMatchDev(dev);
+    });
   }, [id]);
 
   const handleDislike = async () => {
@@ -71,7 +84,7 @@ const Main = ({ navigation }) => {
 
       {loading ? (
         <View style={styles.loadingOrEmptyView}>
-          <Text style={styles.loadingOrEmptyUsersText}>Carregando...</Text>
+          <Text style={styles.loadingOrEmptyUsersText}>Loading...</Text>
         </View>
       ) : users.length ? (
         <View style={styles.userContainer}>
@@ -114,7 +127,27 @@ const Main = ({ navigation }) => {
         </View>
       ) : (
         <View style={styles.loadingOrEmptyView}>
-          <Text style={styles.loadingOrEmptyUsersText}>No one to like or dislike...</Text>
+          <Text style={styles.loadingOrEmptyUsersText}>
+            No one to like or dislike...
+          </Text>
+        </View>
+      )}
+      {matchDev && (
+        <View style={styles.matchContainer}>
+          <Image source={matchImg} style={styles.matchImage}/>
+          <Image
+            source={{
+              uri: matchDev.avatar
+            }}
+            style={styles.matchAvatar}
+          />
+          <Text style={styles.matchName}>{matchDev.name}</Text>
+          <Text style={styles.matchBio}>
+            {matchDev.bio}
+          </Text>
+          <TouchableOpacity onPress={() => setMatchDev(false)}>
+            <Text style={styles.closeMatch}>CLOSE</Text>
+          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>
