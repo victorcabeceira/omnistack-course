@@ -13,18 +13,23 @@ A tinder app copycat using only Javascript ecosystem. Following rocketseat omnis
 # Backend
 To run the backend, access /backend, and run (it will be run on 3333 port):
 > yarn install
+
 > yarn dev
 
 # Frontend
 To run the frontend, access /frontend, and run:
 > yarn install
+
 > yarn start
 
 # Mobile
 To run the mobile, first access /mobile, and run:
 > yarn install
+
 > adb reverse tcp:3333 tcp:3333 (to link localhost to the mobile app)
+
 > yarn start
+
 > react-native run-android
 
 # How to use the app (both frontend and mobile)
